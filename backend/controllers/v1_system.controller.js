@@ -234,7 +234,7 @@ const login = async (req, res, next) => {
               res.cookie("BankOfBihar", token, { maxAge: 24 * 60 * 60 * 1000 }); // 1 day in milliseconds
               return res.status(200).json({
                 success: true,
-                message: "Login successfully",
+                msg: "Login successfully",
                 data: customer,
               });
             }

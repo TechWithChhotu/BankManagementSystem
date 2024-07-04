@@ -10,7 +10,7 @@ const twilioClient = createTwilioClient(accountSid, authToken);
 
 const sendOTPonNumber = async (clientPhoneNumber) => {
   try {
-    console.log(`Client Phone Number => ${clientPhoneNumber}`);
+    // console.log(`Client Phone Number => ${clientPhoneNumber}`);
 
     const OTP = generateOTP();
     return await twilioClient.messages

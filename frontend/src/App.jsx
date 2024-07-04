@@ -1,14 +1,35 @@
 import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
 import "./App.css";
+import {
+  createBrowserRouter,
+  Route,
+  createRoutesFromElements,
+  RouterProvider,
+  useLocation,
+} from "react-router-dom";
 
+import CommanLayout from "./layout/CommanLayout";
+import HomePage from "./pages/HomePage";
+import Login from "./components/Login/Login";
+import Test from "./components/test/Test";
+
+const router = createBrowserRouter(
+  createRoutesFromElements(
+    <Route path="">
+      <Route path="" element={<CommanLayout />}>
+        <Route path="" element={<HomePage />}></Route>
+        <Route path="/login" element={<Login />}></Route>
+        <Route path="/test" element={<Test />}></Route>
+      </Route>
+    </Route>
+  )
+);
 function App() {
   const [count, setCount] = useState(0);
 
   return (
     <>
-      <h2 className="bg-orange-300">Back Managment System</h2>
+      <RouterProvider router={router} />
     </>
   );
 }

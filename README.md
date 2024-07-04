@@ -278,6 +278,25 @@ Ensure you have the following dependencies installed:
 }
 ```
 
+# Frontend (UI)
+
+## Login Component
+
+The Login component in React handles user authentication by providing a login form with username and password fields, an optional OTP input, and a virtual keyboard. The component integrates with a backend API to verify user credentials and OTP.
+
+### Dependencies
+
+install required dependencies
+
+```
+npm install react react-dom react-router-dom axios react-toastify react-simple-keyboard
+```
+
+### Virtual Keyboard
+
+Toggle Virtual Keyboard: Enable/disable the virtual keyboard using the provided checkbox.
+Customize Layout: Adjust the virtual keyboard layout by modifying the layoutName state and the Keyboard component's props.
+
 # Contributing
 
 Contributions are welcome! Please fork this repository and submit pull requests for any features, improvements, or bug fixes.
@@ -289,11 +308,3 @@ This project is licensed under the MIT License. See the LICENSE file for more de
 # Contact
 
 For any inquiries or issues, please contact [ techwithchhotu2022@gmail.com , chhotustudymail@gmail.com] or visit [https://chhotupatel.netlify.app/]
-
-```
-
-```
-
-```
-
-```
