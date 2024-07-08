@@ -5,12 +5,10 @@ const Captcha = () => {
   const onChange = () => {};
   return (
     <div>
-      <form>
-        <ReCAPTCHA
-          sitekey="6LfG9AYqAAAAAGhi9JxsWyaOfUBB_vQosSnmaeLD"
-          onChange={onChange}
-        />
-      </form>
+      <ReCAPTCHA
+        sitekey="6LfG9AYqAAAAAGhi9JxsWyaOfUBB_vQosSnmaeLD"
+        onChange={onChange}
+      />
     </div>
   );
 };

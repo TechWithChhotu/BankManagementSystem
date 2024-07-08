@@ -1,5 +1,4 @@
-import React, { useRef, useState } from "react";
-import ReactDOM from "react-dom";
+import React, { useEffect, useRef, useState } from "react";
 import LoginVigilant from "../../assets/Login_1.png";
 import { Link } from "react-router-dom";
 import Captcha from "./Captcha";
@@ -10,10 +9,14 @@ import { toast } from "react-toastify";
 import Toastify from "../toastify/Toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setAuth } from "../../store/user.slice";
+import { useSelector } from "react-redux";
 
 function Login() {
   const notifySuccess = toast.success;
   const navigate = useNavigate();
+  const dispach = useDispatch();
 
   //=================OTP=================
   const [otp, setOtp] = useState(new Array(6).fill(""));
@@ -68,7 +71,7 @@ function Login() {
       [inputName]: inputVal,
     });
 
-    keyboard.current.setInput(inputVal);
+    inputVal && keyboard.current.setInput(inputVal);
   };
 
   const getInputValue = (inputName) => {
@@ -80,6 +83,7 @@ function Login() {
     console.log("Type of OTP ==> ", typeof `${otp}`);
     const otpString = otp.join("");
     console.log("Entred OTP ==> ", otpString);
+    console.log("Entred OTP length ==> ", otpString.length);
 
     e.preventDefault();
     console.log(inputs);
@@ -94,12 +98,11 @@ function Login() {
       { withCredentials: true }
     );
 
-    if (otp) {
+    if (otpString.length === 6) {
       setInputs({});
       navigate("/account");
-    }
-
-    if (response) {
+      dispach(setAuth(response.data));
+    } else {
       setLoginResponse(true);
       if (response.data.success) {
         notifySuccess(response.data.msg);

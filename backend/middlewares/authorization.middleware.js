@@ -4,6 +4,10 @@ const isAuthorized =
   (...roles) =>
   async (req, res, next) => {
     const user = await Employee.findById(req.user.id);
+    console.log("req.user.id ====> ");
+    console.log(req.user.id);
+    console.log("User ===> ");
+    console.log(user);
     if (!user) {
       return res.status(404).json({
         success: false,

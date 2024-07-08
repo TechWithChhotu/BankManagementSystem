@@ -1,4 +1,4 @@
-import { Employee } from "../models/v1_models.mongoDB.js";
+import { Account, Employee } from "../models/v1_models.mongoDB.js";
 import oracledb from "oracledb";
 import { Customer } from "../models/v1_models.mongoDB.js";
 import { Aadhaar } from "../Aadhar/aadhar.models.js";
@@ -255,4 +255,20 @@ const login = async (req, res, next) => {
   }
 };
 
-export { addBranch, getAllBranches, addEmp, login };
+const getUserData = async (req, res, next) => {
+  try {
+    const id = req.user.id;
+    const user = await Customer.findById(id);
+    const account = await Account.findOne({ customer_id: user._id });
+    console.log(account);
+    if (account) {
+      return res.status(200).json({
+        success: true,
+        msg: "data available",
+        data: { account, user },
+      });
+    }
+  } catch (err) {}
+};
+
+export { addBranch, getAllBranches, addEmp, login, getUserData };

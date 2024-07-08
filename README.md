@@ -297,6 +297,14 @@ npm install react react-dom react-router-dom axios react-toastify react-simple-k
 Toggle Virtual Keyboard: Enable/disable the virtual keyboard using the provided checkbox.
 Customize Layout: Adjust the virtual keyboard layout by modifying the layoutName state and the Keyboard component's props.
 
+### Generate QR of respective A/C
+
+### Scan QR pay payment
+
+### Other helper method
+
+# Some Modification in Backend
+
 # Contributing
 
 Contributions are welcome! Please fork this repository and submit pull requests for any features, improvements, or bug fixes.
