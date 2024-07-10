@@ -5,6 +5,9 @@ import { toast } from "react-toastify";
 import { LuScanLine } from "react-icons/lu";
 import BankOfBihar from "../../assets/BankOfBihar.png";
 import { FaIndianRupeeSign } from "react-icons/fa6";
+import { useDispatch, useSelector } from "react-redux";
+import { setAuth, updateBalance } from "../../store/user.slice";
+import getMaskedAccountNumber from "../../helper/getMaskedAc";
 
 const QRCodeScanner = () => {
   const [scannedData, setScannedData] = useState(null);
@@ -36,6 +39,31 @@ const QRCodeScanner = () => {
       inputRef.current.focus();
     }
   }, [paymentInProcess]);
+
+  const dispatch = useDispatch();
+  const fetchData = async () => {
+    console.log("FetchData from App");
+    try {
+      const response = await axios.get(
+        `http://localhost:3000/api/v1/system/get-account`,
+        { withCredentials: true }
+      );
+      if (response) {
+        console.log("get-account ==> ");
+        console.log(response.data);
+        dispatch(setAuth(response.data));
+      }
+    } catch (error) {
+      console.error("Error fetching account data:", error);
+    }
+  };
+
+  // const balance = useSelector(
+  //   (state) => state.record.userData?.data?.account?.balance
+  // );
+  // const userData = useSelector((state) => state.userSlice.userData);
+  // const balance = userData ? userData.data.account.balance : null;
+  // console.log("Balance ===> ", userData.data.account.balance);
 
   const startScan = async () => {
     setScannedData(null);
@@ -125,6 +153,11 @@ const QRCodeScanner = () => {
         setIsScanning(false);
         setError(null);
         notifySuccess("Payment successfully completed");
+        fetchData();
+
+        // console.log("Balance(after) => ", balance);
+        // dispatch(updateBalance(balance - parseInt(amount.replace(/,/g, ""))));
+        // console.log("Balance(after) => ", balance);
         setRefresh(true);
         setAmount("");
       }
@@ -163,7 +196,7 @@ const QRCodeScanner = () => {
       )}
 
       {(isScanning || scannedData != null) && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-100 z-50">
           {!paymentInProcess && (
             <div className="bg-white p-8 rounded-lg shadow-lg">
               <div id="qr-reader" style={{ width: "500px" }}></div>
@@ -201,7 +234,9 @@ const QRCodeScanner = () => {
                   <div className="w-full flex flex-col items-center justify-center">
                     <img src={BankOfBihar} alt="Bank Of Bihar" />
                     <p>name: {scannedData.name}</p>
-                    <p>account: {scannedData.account}</p>
+                    <p>
+                      account: {getMaskedAccountNumber(scannedData.account)}
+                    </p>
                   </div>
                 )}
               </div>
@@ -226,6 +261,18 @@ const QRCodeScanner = () => {
                     onClick={scanToPay}
                   >
                     Pay
+                  </button>
+                  <button
+                    className="mt-4 w-full bg-red-500 text-white py-2 rounded hover:bg-red-600 transition duration-300"
+                    onClick={async () => {
+                      stopScan();
+                      setError("");
+                      setIsScanning(false);
+                      setScannedData(null);
+                      setPaymentInProcess(false);
+                    }}
+                  >
+                    Cancel
                   </button>
                 </div>
               )}

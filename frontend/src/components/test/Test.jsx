@@ -1,25 +1,50 @@
-// src/QRCodeGenerator.js
-
 import React, { useState } from "react";
-import QRCode from "qrcode.react";
+import axios from "axios";
 
-const QRCodeGenerator = ({ name, account }) => {
-  console.log(name, account);
-  const [qrCodeValue, setQrCodeValue] = useState("");
-  const generateQRCode = () => {
-    const data = {
-      name,
-      account,
-    };
-    setQrCodeValue(JSON.stringify(data));
+const MobileNumberGeolocation = () => {
+  const [mobileNumber, setMobileNumber] = useState("");
+  const [info, setInfo] = useState(null);
+  const [error, setError] = useState(null);
+
+  const handleInputChange = (e) => {
+    setMobileNumber(e.target.value);
+  };
+
+  const getGeolocation = async () => {
+    const formattedNumber = `+${mobileNumber.replace(/\D/g, "")}`;
+
+    try {
+      const response = await axios.get(
+        `http://localhost:3000/api/v1/user/lookup?number=${formattedNumber}`
+      );
+      setInfo(response.data);
+      setError(null);
+    } catch (err) {
+      setError(err.response?.data?.error || "An error occurred");
+      setInfo(null);
+    }
   };
 
   return (
     <div>
-      <button onClick={generateQRCode}>Generate QR Code</button>
-      {qrCodeValue && <QRCode value={qrCodeValue} />}
+      <input
+        type="text"
+        value={mobileNumber}
+        onChange={handleInputChange}
+        placeholder="Enter mobile number with country code"
+      />
+      <button onClick={getGeolocation}>Get Info</button>
+
+      {info && (
+        <div>
+          <p>Carrier: {info.carrier.name}</p>
+          <p>Country Code: {info.countryCode}</p>
+        </div>
+      )}
+
+      {error && <p>Error: {error}</p>}
     </div>
   );
 };
 
-export default QRCodeGenerator;
+export default MobileNumberGeolocation;

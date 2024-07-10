@@ -7,12 +7,10 @@ const scanToPay = async (req, res) => {
   try {
     const { name, account, money } = req.body;
 
-    const newTransaction = new Transaction({
-      amount: money,
-      transactionType: "Credit",
-      creditedAccountNumber: account,
-      modeOfTransaction: "Online",
-    });
+    // <<==== TEST CODE ===>>>
+    const senderDet = await Customer.findById(req.user.id); //sender
+    const receiverACDet = await Account.findOne({ accountNumber: account }); //receiver AC Det
+    const receiverDet = await Customer.findById(receiverACDet.customer_id);
 
     // deposite amount in provided a/c number
     const userAccount = await Account.findOneAndUpdate(
@@ -29,6 +27,17 @@ const scanToPay = async (req, res) => {
     await creditAccount.save();
     await userAccount.save();
 
+    const newTransaction = new Transaction({
+      amount: money,
+      transactionType: "Credit",
+      modeOfTransaction: "Online",
+      currentBalance: [userAccount.balance, creditAccount.balance],
+      senderAccountNumber: userAccount.accountNumber, //debiter
+      senderName: senderDet.name, //debiter
+      receiverAccountNumber: receiverACDet.accountNumber, //crediter
+      receiverName: receiverDet.name, //crediter
+    });
+
     if (userAccount) {
       await newTransaction.save();
     } else {
@@ -41,11 +50,7 @@ const scanToPay = async (req, res) => {
       success: true,
       msg: "deposit successfully",
     });
-    // <<==== TEST CODE ===>>>
-    const senderDet = await Customer.findById(req.user.id); //sender
-    const receiverACDet = await Account.findOne({ accountNumber: account }); //receiver AC Det
-    const receiverDet = await Customer.findById(receiverACDet.customer_id);
-    // `+91${receiverDet.phone}`;
+
     await sendSMSonNumber(
       `+91${senderDet.phone}`,
       `Your a/c ${getMaskedAccountNumber(
@@ -73,13 +78,5 @@ const scanToPay = async (req, res) => {
     });
   }
 };
-
-// const checkBankBalanceByUser = async (req, res) => {
-//   try {
-//     const { account } = req.body;
-//     const userAccount = await Account.findOne({ accountNumber: account });
-
-//   } catch (err) {}
-// };
 
 export { scanToPay };

@@ -3,6 +3,7 @@ import {
   addEmp,
   getUserData,
   login,
+  transactionRecords,
 } from "../controllers/v1_system.controller.js";
 import isLoggedIn from "../middlewares/isLoggedIn.middleware.js";
 import isAuthorized from "../middlewares/authorization.middleware.js";
@@ -16,5 +17,6 @@ systemRoute.post(
 );
 systemRoute.post("/login", login);
 systemRoute.get("/get-account", isLoggedIn, getUserData);
+systemRoute.post("/get-transactions", isLoggedIn, transactionRecords);
 
 export default systemRoute;

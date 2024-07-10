@@ -15,19 +15,28 @@ const userSlice = createSlice({
   reducers: {
     setAuth: (state, action) => {
       state.userData = action.payload;
-      console.log(`action.payload.role; ==> `);
-      console.log(action.payload);
-
       state.role = action.payload.role;
       state.login = true;
       state.userData = action.payload;
     },
     setLogout: (state) => {
       state.login = false;
+      state.userData = null;
+      state.role = null;
+      state.userDataAvailable = false;
+    },
+    updateBalance: (state, action) => {
+      if (
+        state.userData &&
+        state.userData.data &&
+        state.userData.data.account
+      ) {
+        state.userData.data.account.balance = action.payload;
+      }
     },
   },
 });
 
-export const { setAuth, setLogout } = userSlice.actions;
+export const { setAuth, setLogout, updateBalance } = userSlice.actions;
 
 export default userSlice.reducer;

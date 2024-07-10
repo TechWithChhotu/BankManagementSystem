@@ -305,6 +305,10 @@ Customize Layout: Adjust the virtual keyboard layout by modifying the layoutName
 
 # Some Modification in Backend
 
+# Check Balance
+
+# See Transaction Records
+
 # Contributing
 
 Contributions are welcome! Please fork this repository and submit pull requests for any features, improvements, or bug fixes.

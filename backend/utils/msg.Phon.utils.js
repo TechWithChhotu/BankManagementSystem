@@ -15,7 +15,7 @@ const sendSMSonNumber = async (clientPhoneNumber, msg) => {
       .create({
         body: `Bank Of Bihar, ${msg} ThankU team Bank Of Bihar`,
         to: clientPhoneNumber,
-        from: "+13146681538", // From a valid Twilio number
+        from: "+17078745733", // From a valid Twilio number
       })
       .then((message) => {
         return message;

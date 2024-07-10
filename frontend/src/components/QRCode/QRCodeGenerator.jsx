@@ -71,7 +71,7 @@ const QRCodeGenerator = ({ name, account }) => {
 
       {/* Modal */}
       {isOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-100 z-50">
           <div className="bg-white p-8 rounded-lg shadow-lg">
             <div id="QRCode" className="flex items-center justify-center">
               <QRCode value={qrCodeValue} size={300} />

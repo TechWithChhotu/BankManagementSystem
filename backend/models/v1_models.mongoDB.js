@@ -60,27 +60,23 @@ const employeesSchema = new mongoose.Schema(
 const transactionSchema = new mongoose.Schema(
   {
     amount: Number,
-    // accountType: String,
+    currentBalance: [Number], //[crediter,debiter]
     transactionType: {
       type: String,
       enum: ["Credit", "Debit"],
     },
-    creditedAccountNumber: String,
-    locatoin: String,
-    locatoinPinCode: Number,
+    senderAccountNumber: String, //debiter
+    senderName: String, //debiter
+    receiverAccountNumber: String, //crediter
+    receiverName: String, //crediter
+    location: String, //online
+    locationPinCode: Number, //online
     modeOfTransaction: {
       type: String,
       enum: ["Online", "Branch"], //agr online hua h to exact location v store karna h,,, taki frod transaction ka pta lagaya ja sake | or unspected time period  me hota h to account ko turant de-active kardenge and transaction ko frig(rad) kar denge.... for eg:  do transaction ek bihar or ek delhi me hota h to  within 5minutes jo ki sambhab nhi h to hm es account ka dono transaction frig(rad) kar denge in the case of credit.... only
     },
-
-    debitedAccountNumber: {
-      type: String,
-      default: "",
-    },
-    creditedAccountNumber: String,
-    Deposit_branch_id: String,
-    teller_emp_id: mongoose.Schema.Types.ObjectId,
-    creditOrDebitAccount: mongoose.Schema.Types.ObjectId,
+    Deposit_branch_id: String, //if branch
+    teller_emp_id: mongoose.Schema.Types.ObjectId, //if branch
   },
   { timestamps: true }
 );
@@ -142,12 +138,6 @@ const atmCardSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
-
-// Middleware to update the updated_at field on every save
-// atmCardSchema.pre("save", function (next) {
-//   this.updated_at = Date.now();
-//   next();
-// });
 
 /*======================>>accountSchema<<======================*/
 const accountSchema = new mongoose.Schema(
@@ -231,8 +221,8 @@ accountSchema.pre("save", async function (next) {
 //** Pre-save middleware to set debitedAccountNumber based on modeOfTransaction
 transactionSchema.pre("save", function (next) {
   if (this.modeOfTransaction === "Online") {
-    this.locatoin = "Jaimangla";
-    this.locatoinPinCode = "811107"; //later i`ve implement, exact piccode gated form frontend and similarlly frontend
+    this.location = "Jaimangla";
+    this.locationPinCode = "811107"; //later i`ve implement, exact piccode gated form frontend and similarlly frontend
   } else if (this.modeOfTransaction === "Branch") {
     this.debitedAccountNumber = "RBI(OwnerAccount)";
   }

@@ -4,11 +4,14 @@ import QRCodeGenerator from "../QRCode/QRCodeGenerator";
 import QRCodeScanner from "../QRCode/QRCodeScanner";
 import { InfinitySpin } from "react-loader-spinner";
 import Temp from "../QRCode/Temp";
+import Balanced from "./Balanced";
+import TransactionRecords from "./TransactionRecords";
 
 const UserAccount = () => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const userData = useSelector((state) => state.userSlice.userData);
+
   useEffect(() => {
     const fetchData = async () => {
       console.log("FetchData form UserAccount");
@@ -41,7 +44,8 @@ const UserAccount = () => {
               account={data.data.account.accountNumber}
             />
             <QRCodeScanner />
-            {/* <Temp /> */}
+            <Balanced />
+            <TransactionRecords />
           </div>
         ) : (
           <div>

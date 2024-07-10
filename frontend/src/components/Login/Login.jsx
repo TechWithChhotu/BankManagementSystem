@@ -108,12 +108,6 @@ function Login() {
         notifySuccess(response.data.msg);
       }
     }
-
-    // const response = await axios.post(
-    //   `http://localhost:3000/api/v1/course/resource/${id}/${lectureId}`,
-    //   { courseId: id, lectureId, name: resourceName, url: resourceUrl },
-    //   { withCredentials: true }
-    // );
   };
 
   return (

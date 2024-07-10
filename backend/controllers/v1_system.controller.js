@@ -1,4 +1,4 @@
-import { Account, Employee } from "../models/v1_models.mongoDB.js";
+import { Account, Employee, Transaction } from "../models/v1_models.mongoDB.js";
 import oracledb from "oracledb";
 import { Customer } from "../models/v1_models.mongoDB.js";
 import { Aadhaar } from "../Aadhar/aadhar.models.js";
@@ -199,14 +199,14 @@ const login = async (req, res, next) => {
         });
       }
     } else {
-      const customer = await Customer.findOne({ phone, password });
+      const user = await Customer.findOne({ phone, password });
 
-      if (customer) {
+      if (user) {
         const otpKey = `otp:${phone}`;
 
         if (!otp) {
           const TSV = await Aadhaar.findOne({
-            adharNumber: customer.adharNumber,
+            adharNumber: user.adharNumber,
           });
           const linkedMobWithAadhar = TSV.phone;
           const OTP = await sendOTPonNumber(`+91${linkedMobWithAadhar}`);
@@ -230,12 +230,18 @@ const login = async (req, res, next) => {
               if (!checkDel) {
                 await redisClient.del(otpKey);
               }
-              const token = customer.generateToken();
+              const token = user.generateToken();
+
+              const account = await Account.findOne({
+                customer_id: user._id,
+              });
+
               res.cookie("BankOfBihar", token, { maxAge: 24 * 60 * 60 * 1000 }); // 1 day in milliseconds
+
               return res.status(200).json({
                 success: true,
                 msg: "Login successfully",
-                data: customer,
+                data: { account, user },
               });
             }
           }
@@ -271,4 +277,34 @@ const getUserData = async (req, res, next) => {
   } catch (err) {}
 };
 
-export { addBranch, getAllBranches, addEmp, login, getUserData };
+const transactionRecords = async (req, res) => {
+  try {
+    const { accountNumber } = req.body;
+    const allTransactions = await Transaction.find({
+      $or: [
+        { senderAccountNumber: accountNumber },
+        { receiverAccountNumber: accountNumber },
+      ],
+    });
+
+    return res.status(200).json({
+      success: true,
+      msg: "Your Transactions Records",
+      data: allTransactions,
+    });
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      msg: err.message,
+    });
+  }
+};
+
+export {
+  addBranch,
+  getAllBranches,
+  addEmp,
+  login,
+  getUserData,
+  transactionRecords,
+};
