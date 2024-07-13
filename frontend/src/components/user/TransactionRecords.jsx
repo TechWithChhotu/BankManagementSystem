@@ -84,7 +84,11 @@ function TransactionRecords() {
       tableRows.push(transactionData);
     });
 
-    doc.autoTable(tableColumn, tableRows, { startY: 20 });
+    doc.autoTable({
+      head: [tableColumn],
+      body: tableRows,
+      startY: 20,
+    });
     doc.text("Transaction Report", 14, 15);
     doc.save(`report_${new Date().toLocaleDateString()}.pdf`);
   };

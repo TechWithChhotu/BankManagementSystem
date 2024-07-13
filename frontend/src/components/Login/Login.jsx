@@ -13,13 +13,30 @@ import { useDispatch } from "react-redux";
 import { setAuth } from "../../store/user.slice";
 import { useSelector } from "react-redux";
 
-function Login() {
+const Login = () => {
   const notifySuccess = toast.success;
   const navigate = useNavigate();
-  const dispach = useDispatch();
+  const dispatch = useDispatch();
+
+  const [isLogin, setIsLogin] = useState(false);
+  const login = useSelector((state) => state.userSlice.login);
+
+  useEffect(() => {
+    const checkLogin = async () => {
+      const loginStatus = await login;
+      setIsLogin(loginStatus);
+      if (loginStatus) {
+        navigate("/");
+      }
+      console.log("Login (isLogin)=> ", loginStatus);
+    };
+
+    checkLogin();
+  }, [login]);
 
   //=================OTP=================
   const [otp, setOtp] = useState(new Array(6).fill(""));
+
   const handleChange = (element, index) => {
     if (isNaN(element.value)) return false;
 
@@ -41,12 +58,7 @@ function Login() {
   const keyboard = useRef();
 
   const onChangeAll = (inputs) => {
-    /**
-     * Here we spread the inputs into a new object
-     * If we modify the same object, react will not trigger a re-render
-     */
     setInputs({ ...inputs });
-    console.log("Inputs changed", inputs);
   };
 
   const handleShift = () => {
@@ -82,31 +94,37 @@ function Login() {
   const HandleLoginSubmit = async (e) => {
     console.log("Type of OTP ==> ", typeof `${otp}`);
     const otpString = otp.join("");
-    console.log("Entred OTP ==> ", otpString);
-    console.log("Entred OTP length ==> ", otpString.length);
+    console.log("Entered OTP ==> ", otpString);
+    console.log("Entered OTP length ==> ", otpString.length);
 
     e.preventDefault();
     console.log(inputs);
 
-    const response = await axios.post(
-      `http://localhost:3000/api/v1/system/login`,
-      {
-        phone: inputs.username,
-        password: inputs.password,
-        otp: loginResponse ? `${otpString}` : "",
-      },
-      { withCredentials: true }
-    );
+    try {
+      const response = await axios.post(
+        `http://localhost:3000/api/v1/system/login`,
+        {
+          phone: inputs.username,
+          password: inputs.password,
+          // branchId: "BRSHK01",
+          otp: loginResponse ? `${otpString}` : "",
+        },
+        { withCredentials: true }
+      );
 
-    if (otpString.length === 6) {
-      setInputs({});
-      navigate("/account");
-      dispach(setAuth(response.data));
-    } else {
-      setLoginResponse(true);
-      if (response.data.success) {
-        notifySuccess(response.data.msg);
+      if (otpString.length === 6) {
+        setInputs({});
+        navigate("/account");
+        dispatch(setAuth(response.data));
+      } else {
+        setLoginResponse(true);
+        if (response.data.success) {
+          notifySuccess(response.data.msg);
+        }
       }
+    } catch (error) {
+      console.error("Error during login:", error);
+      toast.error("Login failed. Please try again.");
     }
   };
 
@@ -209,6 +227,6 @@ function Login() {
       </div>
     </div>
   );
-}
+};
 
 export default Login;

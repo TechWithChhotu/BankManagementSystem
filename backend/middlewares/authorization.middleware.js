@@ -3,6 +3,7 @@ import { Employee } from "../models/v1_models.mongoDB.js";
 const isAuthorized =
   (...roles) =>
   async (req, res, next) => {
+    console.log("Is authorized first check");
     const user = await Employee.findById(req.user.id);
     console.log("req.user.id ====> ");
     console.log(req.user.id);
@@ -23,6 +24,7 @@ const isAuthorized =
           message: "You do not have permission to view this route",
         });
       }
+      console.log("Is Authorized Last Check");
       next();
     }
   };

@@ -17,6 +17,7 @@ import Login from "./components/Login/Login";
 import Test from "./components/test/Test";
 import UserAccount from "./components/user/UserAccount";
 import { setAuth } from "./store/user.slice";
+import Employee from "./components/employee/Employee";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -26,6 +27,7 @@ const router = createBrowserRouter(
         <Route path="/login" element={<Login />}></Route>
         <Route path="/test" element={<Test />}></Route>
         <Route path="/account" element={<UserAccount />}></Route>
+        <Route path="/account-emp" element={<Employee />}></Route>
       </Route>
     </Route>
   )

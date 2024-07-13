@@ -1,6 +1,8 @@
 import express from "express";
 import {
+  checkBankBalance,
   deposite,
+  enableInternetBanking,
   openAccount,
   withdraw,
 } from "../controllers/v1.branch.controller.js";
@@ -19,6 +21,14 @@ branchRoute.post(
 );
 
 branchRoute.post(
+  "/check-bank-balance",
+  isLoggedIn,
+  isAuthorized("Manager", "Teller", "Customer Service Representative", "Admin"),
+  upload.single("avatar"),
+  checkBankBalance
+);
+
+branchRoute.post(
   "/deposite",
   isLoggedIn,
   isAuthorized("Manager", "Teller", "Customer Service Representative", "Admin"),
@@ -30,6 +40,13 @@ branchRoute.post(
   isLoggedIn,
   isAuthorized("Manager", "Teller", "Customer Service Representative", "Admin"),
   withdraw
+);
+
+branchRoute.post(
+  "/enable-internet-banking",
+  isLoggedIn,
+  isAuthorized("Manager", "Teller", "Customer Service Representative", "Admin"),
+  enableInternetBanking
 );
 
 export default branchRoute;

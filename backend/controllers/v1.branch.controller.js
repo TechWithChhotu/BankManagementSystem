@@ -7,7 +7,6 @@ const openAccount = async (req, res) => {
   try {
     const { name, password, phone, email, adharNumber, panNumber } = req.body; //for customber
     const { balance, accountType, isATMCard } = req.body;
-
     // create a new customer
     const newCustomer = new Customer({
       name,
@@ -18,6 +17,7 @@ const openAccount = async (req, res) => {
       panNumber,
     });
     /*---------------------->>Image Handling<<----------------------*/
+
     if (req.file) {
       try {
         const result = await v2.uploader.upload(req.file.path, {
@@ -54,7 +54,6 @@ const openAccount = async (req, res) => {
     if (newCustomer) {
       // Create a new account
 
-      console.log();
       const newAccount = new Account({
         customer_id: newCustomer._id,
         branch_id: "BRSHK01",
@@ -66,7 +65,9 @@ const openAccount = async (req, res) => {
           isAtmCard: false,
         },
       });
+
       await newAccount.save();
+
       return res.status(201).json({
         success: true,
         msg: "Account created successfully",
@@ -74,12 +75,11 @@ const openAccount = async (req, res) => {
       });
     } else {
       await Customer.deleteOne({ _id: newCustomer._id });
-      res.status(500).json({
+      res.status(400).json({
         message: "Failed to open account",
         error: "Something went wrong",
       });
     }
-    console.log("===> 4");
   } catch (err) {
     res
       .status(500)
@@ -183,4 +183,95 @@ const withdraw = async (req, res) => {
   }
 };
 
-export { openAccount, deposite, withdraw };
+const checkBankBalance = async (req, res) => {
+  try {
+    const { accountNumber } = req.body;
+    const newAccount = await Account.findOne({ accountNumber: accountNumber });
+    if (newAccount) {
+      res.status(200).json({
+        success: true,
+        meg: "Balanced Available",
+        data: newAccount,
+      });
+    } else {
+      res.status(401).json({ success: false, msg: "Account Does not exist" });
+    }
+  } catch (err) {
+    res.status(500).json({ success: false, msg: err.message });
+  }
+};
+
+// const enableInternetBanking = async (req, res) => {
+//   try {
+//     const { accountNumber } = req.body;
+
+//     const account = await Account.findOne({ accountNumber });
+
+//     if (!account) {
+//       return res.status(404).json({
+//         success: false,
+//         msg: "Account not found",
+//       });
+//     }
+
+//     account.internetBanking = true;
+//     await account.save();
+
+//     return res.status(200).json({
+//       success: true,
+//       msg: "Internet banking enabled successfully",
+//       data: account,
+//     });
+//   } catch (err) {
+//     res.status(500).json({
+//       success: false,
+//       msg: err.message,
+//     });
+//   }
+// };
+
+const enableInternetBanking = async (req, res) => {
+  try {
+    const { accountNumber, action } = req.body; // action can be 'enable' or 'disable'
+
+    const account = await Account.findOne({ accountNumber });
+    const user = await Customer.findById(account.customer_id);
+
+    if (!account) {
+      return res.status(404).json({
+        success: false,
+        msg: "Account not found",
+      });
+    }
+
+    if (action === "verify") {
+      return res.status(200).json({
+        success: true,
+        msg: "Account details fetched",
+        data: { account, user },
+      });
+    }
+
+    account.internetBanking = action === "enable";
+
+    await account.save();
+
+    return res.status(200).json({
+      success: true,
+      msg: `Internet banking ${action}d successfully`,
+    });
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      msg: err.message,
+    });
+  }
+};
+
+export {
+  openAccount,
+  deposite,
+  withdraw,
+  checkBankBalance,
+  enableInternetBanking,
+};

@@ -309,6 +309,14 @@ Customize Layout: Adjust the virtual keyboard layout by modifying the layoutName
 
 # See Transaction Records
 
+# ChatBot
+
+# Implement OpenCV(python flask)
+
+# Enable/Disable Internet Banking
+
+---
+
 # Contributing
 
 Contributions are welcome! Please fork this repository and submit pull requests for any features, improvements, or bug fixes.

@@ -170,6 +170,11 @@ const accountSchema = new mongoose.Schema(
       enum: [true, false], //true --> Active | false --> Block
       default: true,
     },
+    internetBanking: {
+      type: Boolean,
+      enum: [true, false],
+      default: false,
+    },
     atmCard: {
       isAtmCard: {
         type: Boolean,

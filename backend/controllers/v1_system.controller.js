@@ -179,6 +179,7 @@ import redisClient from "../helper/redis.helper.js";
 
 /*======================Sign-In======================*/
 const login = async (req, res, next) => {
+  console.log("login ===> 1");
   try {
     const { phone, password, lp, branchId, otp } = req.body; // lp--> login pin, later i`ve integrate it ||| branchId, if loger is employee
 
