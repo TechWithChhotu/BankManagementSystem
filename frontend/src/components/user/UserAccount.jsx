@@ -14,8 +14,6 @@ const UserAccount = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      console.log("FetchData form UserAccount");
-      console.log(userData);
       try {
         const result = await userData;
         setData(result);

@@ -3,7 +3,6 @@ import jwt from "jsonwebtoken";
 const isLoggedIn = async (req, res, next) => {
   try {
     const { BankOfBihar } = await req.cookies;
-    console.log(BankOfBihar);
     if (!BankOfBihar) {
       return next(
         res.status(401).json({
@@ -19,7 +18,6 @@ const isLoggedIn = async (req, res, next) => {
         console.log(err);
       }
       req.user = decoded;
-      console.log("IS Login last check");
       next();
     });
   } catch (err) {

@@ -123,17 +123,9 @@ const atmCardSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ["Active", "Inactive"],
-      default: "Active",
+      enum: ["Active", "Inactive", "Block"],
+      default: "Inactive",
       required: true,
-    },
-    created_at: {
-      type: Date,
-      default: Date.now,
-    },
-    updated_at: {
-      type: Date,
-      default: Date.now,
     },
   },
   { timestamps: true }
@@ -191,6 +183,70 @@ const accountSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+/*======================>>RDAccountSchema<<======================*/
+
+const RDAccountSchema = new mongoose.Schema({
+  customer_id: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Customer",
+    required: true,
+  },
+  monthlyDeposit: {
+    type: Number,
+    required: true,
+  },
+  autoDebit: {
+    type: Boolean,
+    default: false,
+  },
+  rate: {
+    type: Number,
+    required: true,
+  },
+  timePeriod: {
+    type: Number, // Time period in years
+    required: true,
+  },
+  maturityAmount: {
+    type: Number,
+    required: true,
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
+});
+
+/*======================>>FDAccountSchema<<======================*/
+const FDAccountSchema = new mongoose.Schema({
+  customer_id: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Customer",
+    required: true,
+  },
+  principal: {
+    type: Number,
+    required: true,
+  },
+  rate: {
+    type: Number,
+    required: true,
+  },
+  timePeriod: {
+    type: Number, // Time period in years
+    required: true,
+  },
+  maturityAmount: {
+    type: Number,
+    required: true,
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
+});
+
 /*======================>>Pre-save middleware to set the transactionLimit<<======================*/
 accountSchema.pre("save", async function (next) {
   try {
@@ -291,7 +347,11 @@ export const FailedTransactionLog = mongoose.model(
   failedTransactionLogSchema
 );
 
+export const FDAccount = mongoose.model("FDAccount", FDAccountSchema);
+export const RDAccount = mongoose.model("RDAccount", RDAccountSchema);
+
 export const Employee = mongoose.model("Employee", employeesSchema);
 export const Transaction = mongoose.model("Transaction", transactionSchema);
 export const Account = mongoose.model("Account", accountSchema);
 export const Customer = mongoose.model("Customer", customerSchema);
+export const ATMCard = mongoose.model("ATMCard", atmCardSchema);

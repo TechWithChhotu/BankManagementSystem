@@ -6,6 +6,7 @@ const initialState = {
   userData: null,
   role: null,
   userDataAvailable: false,
+  isYouEmployee: false,
 };
 
 /*----------------------record slice----------------------*/

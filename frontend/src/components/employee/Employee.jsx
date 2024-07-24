@@ -6,6 +6,12 @@ import Deposit from "./Deposit";
 import CheckBalance from "./CheckBankBalance";
 import TransactionRecords from "./TransactionRecord";
 import EnableInternetBanking from "./EnableInternetBanking";
+import AtmCardManagement from "../atmcard/ATMCardManagement";
+import LoanServices from "../loans/LoanServices";
+import FRDeposit from "../fd-rd/FRDeposit";
+import Insurance from "../Insurance/Insurance";
+import PPF from "../ppf/PPF";
+import Cheques from "../cheques/Cheques";
 
 function Employee() {
   return (
@@ -17,6 +23,12 @@ function Employee() {
         <CheckBalance />
         <TransactionRecords />
         <EnableInternetBanking />
+        <AtmCardManagement />
+        <LoanServices />
+        <FRDeposit />
+        <Insurance />
+        <PPF />
+        <Cheques />
       </div>
     </div>
   );

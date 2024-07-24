@@ -18,7 +18,7 @@ import Test from "./components/test/Test";
 import UserAccount from "./components/user/UserAccount";
 import { setAuth } from "./store/user.slice";
 import Employee from "./components/employee/Employee";
-
+import ViewSummery from "./components/fd-rd/ViewSummery";
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="">
@@ -27,13 +27,30 @@ const router = createBrowserRouter(
         <Route path="/login" element={<Login />}></Route>
         <Route path="/test" element={<Test />}></Route>
         <Route path="/account" element={<UserAccount />}></Route>
-        <Route path="/account-emp" element={<Employee />}></Route>
+        <Route path="/account-emp">
+          <Route path="" element={<Employee />} />
+          <Route path="view-summery" element={<ViewSummery />} />
+        </Route>
       </Route>
     </Route>
   )
 );
 function App() {
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    const handleContextMenu = (event) => {
+      event.preventDefault();
+      alert("This function is not allowed here.");
+    };
+
+    document.addEventListener("contextmenu", handleContextMenu);
+
+    return () => {
+      document.removeEventListener("contextmenu", handleContextMenu);
+    };
+  }, []);
+
   useEffect(() => {
     const fetchData = async () => {
       console.log("FetchData from App");

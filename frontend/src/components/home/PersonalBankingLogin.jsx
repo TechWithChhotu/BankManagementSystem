@@ -20,11 +20,11 @@ function PersonalBankingLogin() {
 
   return (
     <div className="bg-[#CBC5C5]   py-10  ">
-      <div className="bg-[#643BF4] mx-10   flex flex-col items-center py-10 gap-5 justify-center rounded-md shadow-inner ">
+      <div className="bg-blue-600 mx-10   flex flex-col items-center py-10 gap-5 justify-center rounded-md shadow-inner ">
         <h3 className="text-[#ffffff] text-6xl">Personal Banking</h3>
         <IoPersonOutline className="text-[#CBC5C5] text-9xl" />
         <Link to={`${isLogin ? "/account" : "/login"}`}>
-          <button className="bg-[#CBC5C5] text-[#643BF4] px-20 py-5 w-fit text-4xl rounded-md shadow-2xl shadow-black">
+          <button className="bg-[#CBC5C5] text-blue-600 px-20 py-5 w-fit text-4xl rounded-md shadow-2xl shadow-black">
             {isLogin ? "Go To Account" : "Go for Login"}
           </button>
         </Link>

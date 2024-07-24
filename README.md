@@ -315,6 +315,10 @@ Customize Layout: Adjust the virtual keyboard layout by modifying the layoutName
 
 # Enable/Disable Internet Banking
 
+# ATM Services both side frontend and backendn
+
+# FD/RD Services both side frontend and backend
+
 ---
 
 # Contributing
